@@ -37,6 +37,17 @@ function add_marker(pos, str) {
 	});
 }
 
+$('#message-button').click(funcion() {
+	var lat = position.coords.latitude;
+	var lon = position.coords.longitude;
+	cb.__call(
+		"statuses_update",
+		{"status": $('#message-input').val(), "lat=" + lat, "long=" + lon},
+		function(reply) {
+			console.log(reply);
+		}
+});
+
 google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
