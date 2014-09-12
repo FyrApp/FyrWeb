@@ -70,7 +70,7 @@ window.onload = function() {
 }
 
 
-function tweets_by_hashtag(htag) {
+function tweets_by_hashtag(htag, fn) {
 	if (!twitter_authed) {
 		return null;
 	}
@@ -79,12 +79,12 @@ function tweets_by_hashtag(htag) {
 			"q=%23" + htag,
 			function (reply, rate_limit_status) {
 				console.log(rate_limit_status);
-				tweet_ids = tweet_id_from_reply(reply);
+				fn(reply);
 			});
 }
 var foo = '';
 
-function tweets_by_username(uname) {
+function tweets_by_username(uname, fn) {
 	if (!twitter_authed) {
 		return null;
 	}
