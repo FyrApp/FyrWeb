@@ -26,6 +26,17 @@ function add_marker(pos, str, image) {
 	});
 }
 
+$('#message-button').click(funcion() {
+	var lat = position.coords.latitude;
+	var lon = position.coords.longitude;
+	cb.__call(
+		"statuses_update",
+		{"status": $('#message-input').val(), "lat=" + lat, "long=" + lon},
+		function(reply) {
+			console.log(reply);
+		}
+});
+
 google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
@@ -85,7 +96,21 @@ function tweets_by_username(uname, fn) {
 			"q=%3A" + uname,
 			function (reply, rate_limit_status) {
 				console.log(rate_limit_status);
-				tweet_ids = tweet_id_from_reply(reply);
+				fn(reply);
+			});
+}
+
+function tweets_by_following(uname, fn) {
+	if (!twitter_authed) {
+		return null;
+	}
+
+	cb.__call(
+			"followers_list",
+			"screen_name=" + uname,
+			function (reply, rate_limit_status) {
+				console.log(rate_limit_status);
+				fn(reply);
 			});
 }
 
