@@ -1,4 +1,5 @@
 var map
+var cb = new Codebird;
 
 function initialize() {
 	var mapOptions = {
@@ -29,7 +30,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
 window.onload = function() {
-	var cb = new Codebird;
 	var twitter_authed = false;
 	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
 
@@ -65,11 +65,8 @@ function check_pin(){
 			function (reply) {
 				// store the authenticated token, which may be different from the request token (!)
 				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
-				if (supports_html5_storage()) {
-					console.log("yo")
-					localStorage.setItem("token", reply.oauth_token)
-					localStorage.setItem("token_secret", reply.oauth_token_secret)
-				}
+				localStorage.setItem("token", reply.oauth_token)
+				localStorage.setItem("token_secret", reply.oauth_token_secret)
 				// if you need to persist the login after page reload,
 
 				twitter_authed = true;
