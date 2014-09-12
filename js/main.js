@@ -68,7 +68,7 @@ window.onload = function() {
 	}
 
 	populate_tweets();
-	setInterval(populate_tweets, 60000);
+	setInterval(populate_tweets, 15000);
 }
 
 
@@ -152,9 +152,9 @@ function populate_tweets(){
 		for (i in statuses){
 			if (tweets.indexOf(statuses[i]["id"]) == -1){
 				tweets.push(statuses[i]["id"])
-				if (statuses[i]["place"]){
-					status_pos = statuses[i]["place"]["bounding_box"]["coordinates"][0][0]
-					status_latlng = {lat : status_pos[1], lng: status_pos[0]}
+				if (statuses[i]["geo"]){
+					status_pos = statuses[i]["geo"]["coordinates"]
+					status_latlng = {lat : status_pos[0], lng: status_pos[1]}
 					image = statuses[i]["user"]["profile_image_url"]
 					add_marker(status_latlng, statuses[i]["text"].replace("#napalmapp", ""), image)
 				}
