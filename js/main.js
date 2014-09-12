@@ -7,13 +7,14 @@ function initialize() {
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
-	add_marker({ lat: 43.7869432, lng: -79.1899812}, "boop")
+	add_marker({ lat: 43.7869432, lng: -79.1899812}, "boop", "")
 }
 
-function add_marker(pos, str) {
+function add_marker(pos, str, profile_img) {
 	var marker = new google.maps.Marker({
 		position: pos,
 		map: map,
+		icon: profile_img,
 		animation: google.maps.Animation.DROP,
 	});
 	var infowindow = new google.maps.InfoWindow({
