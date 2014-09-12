@@ -5,7 +5,7 @@ var twitter_authed = false;
 function initialize() {
 	var mapOptions = {
 		center: { lat: 43.7869432, lng: -79.1899812},
-		zoom: 16
+		zoom: 8
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
@@ -26,15 +26,15 @@ function add_marker(pos, str, image) {
 	});
 }
 
-$('#message-button').click(funcion() {
+$('#message-button').click(function() {
 	var lat = position.coords.latitude;
 	var lon = position.coords.longitude;
 	cb.__call(
 		"statuses_update",
-		{"status": $('#message-input').val(), "lat=" + lat, "long=" + lon},
+		{"status": $('#message-input').val(), "lat" : lat, "long" : lon},
 		function(reply) {
 			console.log(reply);
-		}
+		});
 });
 
 google.maps.event.addDomListener(window, 'load', initialize);
