@@ -69,6 +69,34 @@ window.onload = function() {
 	}
 }
 
+
+function tweets_by_hashtag(htag) {
+    if (!twitter_authed) {
+        return null;
+    }
+    cb.__call(
+            "search_tweets",
+            "q=%23" + htag,
+            function (reply, rate_limit_status) {
+                console.log(rate_limit_status);
+                console.log(reply);
+            });
+}
+
+function tweets_by_username(uname) {
+    if (!twitter_authed) {
+        return null;
+    }
+    cb.__call(
+            "search_tweets",
+            "q=%3A" + uname,
+            function (reply, rate_limit_status) {
+                console.log(rate_limit_status);
+                console.log(reply);
+            });
+
+}
+
 function check_pin(){
 	cb.__call(
 			"oauth_accessToken",
