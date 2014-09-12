@@ -114,6 +114,38 @@ function tweets_by_following(uname, fn) {
 			});
 }
 
+function tweets_by_latlong(fn) {
+	if (!twitter_authed) {
+		return null;
+	}
+
+	var bounds = map.getBounds();
+
+	var center = bounds.getCenter();
+	var ne = bounds.getNorthEast();
+
+	// r = radius of the earth in statute miles
+	var r = 3963.0;
+
+	// Convert lat or lng from decimal degrees into radians (divide by 57.2958)
+	var lat1 = center.lat() / 57.2958;
+	var lon1 = center.lng() / 57.2958;
+	var lat2 = ne.lat() / 57.2958;
+	var lon2 = ne.lng() / 57.2958;
+
+	// distance = circle radius from center to Northeast corner of bounds
+	var dis = parseInt(r * Math.acos(Math.sin(lat1) * Math.sin(lat2) +
+	  Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)));
+
+	cb.__call(
+			"search_tweets",
+			"q=#napalmapp&geocode=" + center.lat() + "," + center.lng() + "," + dis + "mi",
+			function (reply, rate_limit_status) {
+				console.log(rate_limit_status);
+				fn(reply);
+			});
+}
+
 function tweet_id_from_reply(reply) {
 
 	var statuses = reply.statuses;
