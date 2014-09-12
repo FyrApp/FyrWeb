@@ -9,24 +9,13 @@ function initialize() {
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
-	add_marker({ lat: 43.7869432, lng: -79.1899812}, "boop")
 }
 
-function get_img() {
-	var user_img = user_by_tweet();
-	if (user_img["profile_image_url"] == 'null') {
-		return ''
-	} else {
-		return user_img["profile_image_url"]
-	}
-}
-
-function add_marker(pos, str) {
-	var profile_img = get_img();
+function add_marker(pos, str, image) {
 	var marker = new google.maps.Marker({
 		position: pos,
 		map: map,
-		icon: profile_img,
+		icon: image,
 		animation: google.maps.Animation.DROP,
 	});
 	var infowindow = new google.maps.InfoWindow({
@@ -66,6 +55,9 @@ window.onload = function() {
 			}
 		);
 	}
+
+	populate_tweets();
+	setInterval(populate_tweets, 60000);
 }
 
 
@@ -126,4 +118,22 @@ function check_pin(){
 				// consider storing the token in a cookie or HTML5 local storage
 			}
 			);
+}
+
+var tweets = [];
+function populate_tweets(){
+	tweets_by_hashtag("napalmapp", function(reply){
+		statuses = reply["statuses"]
+		for (i in statuses){
+			if (tweets.indexOf(statuses[i]["id"]) == -1){
+				tweets.push(statuses[i]["id"])
+				if (statuses[i]["place"]){
+					status_pos = statuses[i]["place"]["bounding_box"]["coordinates"][0][0]
+					status_latlng = {lat : status_pos[1], lng: status_pos[0]}
+					image = statuses[i]["user"]["profile_image_url"]
+					add_marker(status_latlng, statuses[i]["text"].replace("#napalmapp", ""), image)
+				}
+			}
+		}
+	});
 }
