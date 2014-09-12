@@ -14,12 +14,10 @@ function initialize() {
 
 function get_img() {
 	var user_img = user_by_tweet();
-	var img = user_img["profile_image_url"];
-	
-	if (img == 'null') {
-		return default_img;
+	if (user_img["profile_image_url"] == 'null') {
+		return ''
 	} else {
-		return img;
+		return user_img["profile_image_url"]
 	}
 }
 
@@ -43,26 +41,32 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
 window.onload = function() {
-	var twitter_authed = false;
 	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
 
-cb.__call(
-    "oauth_requestToken",
-    {oauth_callback: "oob"},
-    function (reply) {
-        // stores it
-        cb.setToken(reply.oauth_token, reply.oauth_token_secret);
+	if (localStorage["token"] && localStorage["token_secret"]) {
+		cb.setToken(localStorage["token"], localStorage["token_secret"])
+		$("#pin").hide()
+		twitter_authed = true;
+	} else {
+		cb.__call(
+			"oauth_requestToken",
+			{oauth_callback: "oob"},
+			function (reply) {
+				// stores it
+				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
 
-        // gets the authorize screen URL
-        cb.__call(
-            "oauth_authorize",
-            {},
-            function (auth_url) {
-                window.codebird_auth = window.open(auth_url);
-            }
-        );
-    }
-);
+				// gets the authorize screen URL
+				cb.__call(
+					"oauth_authorize",
+					{},
+					function (auth_url) {
+						window.codebird_auth = window.open(auth_url);
+					}
+				);
+			}
+		);
+	}
+}
 
 
 function tweets_by_hashtag(htag, fn) {
@@ -118,6 +122,7 @@ function check_pin(){
 				// if you need to persist the login after page reload,
 
 				twitter_authed = true;
+				$("#pin").hide()
 				// consider storing the token in a cookie or HTML5 local storage
 			}
 			);
