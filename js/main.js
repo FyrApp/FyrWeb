@@ -1,5 +1,6 @@
 var map
 var cb = new Codebird;
+var twitter_authed = false;
 
 function initialize() {
 	var mapOptions = {
