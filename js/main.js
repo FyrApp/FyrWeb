@@ -42,95 +42,83 @@ function add_marker(pos, str) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
-window.onload = function () {
-    var twitter_authed = false;
-    cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
+window.onload = function() {
+	var twitter_authed = false;
+	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
 
-    cb.__call(
-        "oauth_requestToken",
-        { oauth_callback: "oob" },
-        function (reply) {
-            // stores it
-            cb.setToken(reply.oauth_token, reply.oauth_token_secret);
+cb.__call(
+    "oauth_requestToken",
+    {oauth_callback: "oob"},
+    function (reply) {
+        // stores it
+        cb.setToken(reply.oauth_token, reply.oauth_token_secret);
 
-            // gets the authorize screen URL
-            cb.__call(
-                "oauth_authorize",
-                {},
-                function (auth_url) {
-                    window.codebird_auth = window.open(auth_url);
-                }
-            );
-        }
-    );
-
-
-    function tweets_by_hashtag(htag, fn) {
-        if (!twitter_authed) {
-            return null;
-        }
+        // gets the authorize screen URL
         cb.__call(
-                "search_tweets",
-                "q=%23" + htag,
-                function (reply, rate_limit_status) {
-                    console.log(rate_limit_status);
-                    fn(reply);
-                });
+            "oauth_authorize",
+            {},
+            function (auth_url) {
+                window.codebird_auth = window.open(auth_url);
+            }
+        );
     }
-    var foo = '';
+);
 
-    function tweets_by_username(uname, fn) {
-        if (!twitter_authed) {
-            return null;
-        }
 
-        cb.__call(
-                "search_tweets",
-                "q=%3A" + uname,
-                function (reply, rate_limit_status) {
-                    console.log(rate_limit_status);
-                    tweet_ids = tweet_id_from_reply(reply);
-                });
-    }
+function tweets_by_hashtag(htag, fn) {
+	if (!twitter_authed) {
+		return null;
+	}
+	cb.__call(
+			"search_tweets",
+			"q=%23" + htag,
+			function (reply, rate_limit_status) {
+				console.log(rate_limit_status);
+				fn(reply);
+			});
+}
+var foo = '';
 
-    function tweet_id_from_reply(reply) {
+function tweets_by_username(uname, fn) {
+	if (!twitter_authed) {
+		return null;
+	}
 
-        var statuses = reply.statuses;
-        var tweet_ids = [];
-        console.log(statuses);
-        for (i = 0; i < statuses.length; i++) {
-            tweet_ids.push(statuses[i].id);
-        }
+	cb.__call(
+			"search_tweets",
+			"q=%3A" + uname,
+			function (reply, rate_limit_status) {
+				console.log(rate_limit_status);
+				tweet_ids = tweet_id_from_reply(reply);
+			});
+}
 
-        return tweet_ids;
-    }
+function tweet_id_from_reply(reply) {
 
-    function check_pin() {
-        cb.__call(
-                "oauth_accessToken",
-                { oauth_verifier: document.getElementById("pin").value },
-                function (reply) {
-                    // store the authenticated token, which may be different from the request token (!)
-                    cb.setToken(reply.oauth_token, reply.oauth_token_secret);
+	var statuses = reply.statuses;
+	var tweet_ids = [];
+	console.log(statuses);
+	for (i = 0; i < statuses.length; i++) {
+		tweet_ids.push(statuses[i].id);
+	}
 
-                    localStorage.setItem("token", reply.oauth_token)
-                    localStorage.setItem("token_secret", reply.oauth_token_secret)
-                    // if you need to persist the login after page reload,
+	return tweet_ids;
+}
 
-                    twitter_authed = true;
-                    // consider storing the token in a cookie or HTML5 local storage
-                }
-                );
-    }
+function check_pin(){
+	cb.__call(
+			"oauth_accessToken",
+			{oauth_verifier: document.getElementById("pin").value},
+			function (reply) {
+				// store the authenticated token, which may be different from the request token (!)
+				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
 
-    function user_by_tweet(tweetid) {
-        cb.__call("statuses_show_ID", "id=" + tweetid,
-                function (tweet) {
-                    cb.__call("users_show", "user_id=" + tweet["user"]["id_str"],
-                            function (user) {
-                                console.log(user);
-                                return user
-                            });
-                });
-    }
+				localStorage.setItem("token", reply.oauth_token)
+				localStorage.setItem("token_secret", reply.oauth_token_secret)
+				// if you need to persist the login after page reload,
+
+				twitter_authed = true;
+				// consider storing the token in a cookie or HTML5 local storage
+			}
+			);
 }
