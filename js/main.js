@@ -71,30 +71,43 @@ window.onload = function() {
 
 
 function tweets_by_hashtag(htag) {
-    if (!twitter_authed) {
-        return null;
-    }
-    cb.__call(
-            "search_tweets",
-            "q=%23" + htag,
-            function (reply, rate_limit_status) {
-                console.log(rate_limit_status);
-                console.log(reply);
-            });
+	if (!twitter_authed) {
+		return null;
+	}
+	cb.__call(
+			"search_tweets",
+			"q=%23" + htag,
+			function (reply, rate_limit_status) {
+				console.log(rate_limit_status);
+				tweet_ids = tweet_id_from_reply(reply);
+			});
 }
+var foo = '';
 
 function tweets_by_username(uname) {
-    if (!twitter_authed) {
-        return null;
-    }
-    cb.__call(
-            "search_tweets",
-            "q=%3A" + uname,
-            function (reply, rate_limit_status) {
-                console.log(rate_limit_status);
-                console.log(reply);
-            });
+	if (!twitter_authed) {
+		return null;
+	}
 
+	cb.__call(
+			"search_tweets",
+			"q=%3A" + uname,
+			function (reply, rate_limit_status) {
+				console.log(rate_limit_status);
+				tweet_ids = tweet_id_from_reply(reply);
+			});
+}
+
+function tweet_id_from_reply(reply) {
+
+	var statuses = reply.statuses;
+	var tweet_ids = [];
+	console.log(statuses);
+	for (i = 0; i < statuses.length; i++) {
+		tweet_ids.push(statuses[i].id);
+	}
+
+	return tweet_ids;
 }
 
 function check_pin(){
