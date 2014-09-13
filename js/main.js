@@ -26,10 +26,12 @@ function add_marker(pos, str, image) {
 	});
 }
 
-$(function () {
+function get_location() {
 	function success(position) {
 		var latitude  = position.coords.latitude;
 		var longitude = position.coords.longitude;
+		
+		return [latitude, longitude];
 	};
 
 	function error() {
@@ -37,7 +39,7 @@ $(function () {
 	};
 
 	navigator.geolocation.getCurrentPosition(success, error);
-});
+}
 
 $(function () {
 	$('#message-button').on('click', function() {
@@ -46,13 +48,22 @@ $(function () {
 		var encoded_msg_in = "status=" + encodeURIComponent(msg_in);
 		$("#message-input").val("");
 
-		cb.__call(
-			"statuses_update",
-			encoded_msg_in,
+		if (typeof get_location[0] == "number" && typeof get_location[1] == "number") {
 
-			function(reply) {
-				console.log(reply)
-			});
+			var lat = get_location()[0];
+			var lon = get_location()[1];
+
+			cb.__call(
+				"statuses_update",
+				encoded_msg_in,
+				"lat=" + lat,
+				"long=" + lon,
+				function(reply) {
+					console.log(reply)
+				});
+		} else {
+			alert("geo location not on");
+		};
 	});
 });
 
