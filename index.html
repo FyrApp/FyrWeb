@@ -7,9 +7,12 @@
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
-	<div id="map-canvas" style="height: 700px; width: 100vw;"></div>
-	<input id="message-input" type="text"></input>
-	<input id="message-button" type="button"></input>
-	<input id="pin" onchange="check_pin()"></input>
-	
+	<div id="map-canvas"></div>
+	<div>
+		<span>
+			<textarea id="message-input" type="text" rows="4" cols="35" maxlength="140"></textarea>
+			<input id="message-button" type="button"/>
+			<input id="pin" onchange="check_pin()"></input>
+		</span>
+	</div>
 </body>

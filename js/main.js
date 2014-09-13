@@ -5,7 +5,7 @@ var twitter_authed = false;
 function initialize() {
 	var mapOptions = {
 		center: { lat: 43.7869432, lng: -79.1899812},
-		zoom: 16
+		zoom: 8
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
@@ -27,15 +27,32 @@ function add_marker(pos, str, image) {
 }
 
 $(function () {
+	function success(position) {
+		var latitude  = position.coords.latitude;
+		var longitude = position.coords.longitude;
+	};
+
+	function error() {
+		console.log("Unable to retrieve current location");
+	};
+
+	navigator.geolocation.getCurrentPosition(success, error);
+});
+
+$(function () {
 	$('#message-button').on('click', function() {
+		// store tweet in var
 		var msg_in = $("#message-input").val();
+		var encoded_msg_in = "status=" + encodeURIComponent(msg_in);
+		$("#message-input").val("");
+
 		cb.__call(
 			"statuses_update",
-			{"status": msg_in},
+			encoded_msg_in,
+
 			function(reply) {
-				console.log(reply);
+				console.log(reply)
 			});
-		$("#message-input")
 	});
 });
 

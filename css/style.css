@@ -1,1 +1,1 @@
-html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+html, body, #map-canvas { height: 90vh; width: 100vw; margin: 0; padding: 0;}
