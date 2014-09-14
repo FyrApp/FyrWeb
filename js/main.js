@@ -48,19 +48,24 @@ $(function () {
 		// store tweet in var
 		var msg_in = $("#message-input").val();
 		$("#message-input").val("");
+		
+		if (msg_in.length > 130) {
+			alert("message is too long, please keep it to under 130 chars");
+			msg_in = ''
+		} else {
+			var params = {
+				status: msg_in + " #napalmapp",
+				lat: latitude,
+				long: longitude
+			};
 
-		var params = {
-			status: msg_in,
-			lat: latitude,
-			long: longitude
-		};
-
-		cb.__call(
-			"statuses_update",
-			params,
-			function(reply) {
-				console.log(reply)
-			});
+			cb.__call(
+				"statuses_update",
+				params,
+				function(reply) {
+					console.log(reply)
+				});
+		}
 	});
 });
 
