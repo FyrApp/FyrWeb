@@ -27,7 +27,7 @@ function add_marker(pos, str, image) {
 }
 
 var latitude, longitude;
-$(document).ready(function(){
+$(function(){
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(handle_geolocation_query, handle_errors);
 	} else {
@@ -41,31 +41,28 @@ function handle_errors(error) {
 function handle_geolocation_query(position){  
 	latitude = (position.coords.latitude);
 	longitude = (position.coords.longitude); 
-	tweet();
 }
 
-function tweet() {
+$(function () {
 	$('#message-button').on('click', function() {
 		// store tweet in var
 		var msg_in = $("#message-input").val();
-		var encoded_msg_in = "status=" + encodeURIComponent(msg_in);
 		$("#message-input").val("");
 
-		if (typeof latitude  == "number" && typeof longitude == "number") {
-			cb.__call(
-				"statuses_update",
-				encoded_msg_in,
-				"lat=" + latitude,
-				"long=" + longitude,
-				function(reply) {
-					console.log(reply)
-				});
-		} else {
-			//error handling here
-			console.log("failed")
+		var params = {
+			status: msg_in,
+			lat: latitude,
+			long: longitude
 		};
+
+		cb.__call(
+			"statuses_update",
+			params,
+			function(reply) {
+				console.log(reply)
+			});
 	});
-}
+});
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
