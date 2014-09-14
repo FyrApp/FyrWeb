@@ -42,6 +42,7 @@ $(function(){
 function handle_errors(error) {  
 	// error handling here
 }
+
 function handle_geolocation_query(position){  
 	latitude = (position.coords.latitude);
 	longitude = (position.coords.longitude); 
@@ -56,6 +57,8 @@ $(function () {
 		if (msg_in.length > 130) {
 			alert("message is too long, please keep it to under 130 chars");
 			msg_in = ''
+		} else if (msg_in.length == 0) {
+			alert("Please enter something to tweet!");
 		} else {
 			var params = {
 				status: msg_in + " #napalmapp",
