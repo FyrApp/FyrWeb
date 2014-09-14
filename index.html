@@ -7,6 +7,12 @@
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
+	<div class="auth-overlay" id="pin-hide">
+		<div class="modal">
+			<p class="text-one"> This is #NapalmApp! </p>
+			<input id="pin" class="authenticate-prompt" placeholder="Please Authenticate" onchange="check_pin()"/>
+		</div>	
+	</div>
 	<div id="map-canvas"></div>
 	<div id="footer-overlay">
 		<span>
@@ -17,6 +23,5 @@
 				Tweet this!
 			</button>
 		</span>
-		<input id="pin" onchange="check_pin()"/>
 	</div>
 </body>

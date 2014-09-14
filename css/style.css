@@ -1,5 +1,58 @@
 html, body, #map-canvas { height: 83vh; width: 100vw; margin: 0; padding: 0;}
 
+.auth-overlay{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	background-color: rgba(0,0,0,0.5);
+}
+
+auth-overlay:-webkit-input-placeholder {
+	color: #b5b5b5;
+  }
+
+auth-overlay-moz-placeholder {
+	color: #b5b5b5;
+}
+
+.modal {
+	width: 30vw;
+	height: 25vh;
+	line-height: 200px;
+	position: fixed;
+	top: 50%; 
+	left: 50%;
+	margin-top: -20vh;
+	margin-left: -15vw;
+	background-color: #4099FF;
+	border-radius: 5px;
+	text-align: center;
+	z-index: 11;
+}
+
+.text-one {
+	color: #0033CC;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-weight: 400;
+	font-size: 1.2em;
+}
+
+.authenticate-prompt {
+	width: 270px;
+	padding: 15px 25px;
+}
+
+authenticate-prompt:-webkit-input-placeholder {
+	color: #b5b5b5;
+}
+
+authenticate-prompt-moz-placeholder {
+	color: #b5b5b5;
+}
+
 #footer-overlay {
 	height: 17vh;
 	width: 100vw;

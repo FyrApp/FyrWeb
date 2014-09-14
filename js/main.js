@@ -210,7 +210,7 @@ function check_pin(){
 				// if you need to persist the login after page reload,
 
 				twitter_authed = true;
-				$("#pin").hide()
+				$("#pin-hide").hide()
 				// consider storing the token in a cookie or HTML5 local storage
 			}
 			);
