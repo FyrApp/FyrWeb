@@ -41,8 +41,10 @@ auth-overlay-moz-placeholder {
 }
 
 .authenticate-prompt {
-	width: 270px;
+	width: 30vw;
 	padding: 15px 25px;
+	border: 1px solid #FFF;
+	border-radius: 5px;
 }
 
 authenticate-prompt:-webkit-input-placeholder {
