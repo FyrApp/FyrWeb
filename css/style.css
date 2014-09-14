@@ -1,1 +1,56 @@
-html, body, #map-canvas { height: 90vh; width: 100vw; margin: 0; padding: 0;}
+html, body, #map-canvas { height: 83vh; width: 100vw; margin: 0; padding: 0;}
+
+#footer-overlay {
+	height: 17vh;
+	width: 100vw;
+	background-color: #4099FF;
+	z-index: 3;
+}
+            
+inputs:-webkit-input-placeholder {
+	color: #b5b5b5;
+}
+
+inputs-moz-placeholder {
+	color: #b5b5b5;
+}
+
+.inputs {
+	width: 270px;
+	padding: 15px 25px;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-weight: 400;
+	font-size: 0.9em;
+	color: #9D9E9E;
+	text-shadow: 1px 1px 0 rgba(256, 256, 256, 1.0);
+	background: #FFF;
+	border: 1px solid #FFF;
+	border-radius: 5px;
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
+	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
+	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
+}
+
+.centre {
+	margin-left: 40vw;
+	margin-top: 1.5vh;
+}
+
+.under-centre {
+	margin-left: 40vw;
+	margin-top: 1vh;
+}
+
+.buttons {
+	width: 270px;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	font-weight: 400;
+	font-size: 0.9em;
+	color: #9D9E9E;
+	background: #FFF;
+	border: 1px solid #FFF;
+	border-radius: 5px;
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
+	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
+	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.50);
+}

@@ -1,18 +1,22 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr6Q1UTFrTPYd2nu6XiCJME7hgO1QiMo0">
-	</script>
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr6Q1UTFrTPYd2nu6XiCJME7hgO1QiMo0"></script>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/codebird.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
 	<div id="map-canvas"></div>
-	<div>
+	<div id="footer-overlay">
 		<span>
-			<textarea id="message-input" type="text" rows="4" cols="35" maxlength="140"></textarea>
-			<input id="message-button" type="button"/>
-			<input id="pin" onchange="check_pin()"></input>
+			<textarea id="message-input" class="inputs centre" placeholder="Share with #NapalmApp" type="text" rows="4" cols="35" maxlength="140"></textarea>
 		</span>
+		<span>
+			<button id="message-button" class="buttons  under-centre" type="button">
+				Tweet this!
+			</button>
+		</span>
+		<input id="pin" onchange="check_pin()"/>
 	</div>
 </body>

@@ -5,7 +5,11 @@ var twitter_authed = false;
 function initialize() {
 	var mapOptions = {
 		center: { lat: 43.7869432, lng: -79.1899812},
-		zoom: 8
+		zoom: 8,
+		panControl: false,
+		zoomControl: false,
+		streetViewControl: false,
+		mapTypeControl: false
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
