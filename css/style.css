@@ -1,11 +1,17 @@
 html, body, #map-canvas { height: 83vh; width: 100vw; margin: 0; padding: 0;}
 
 .auth-overlay{
+	display: flex;
+	display: -webkit-flex;
+	-webkit-flex-direction: column; /* works with row or column */
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	ustify-content: center;
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	z-index: 10;
 	background-color: rgba(0,0,0,0.5);
 }
@@ -21,27 +27,27 @@ auth-overlay-moz-placeholder {
 .modal {
 	width: 30vw;
 	height: 25vh;
-	line-height: 200px;
-	position: fixed;
-	top: 50%; 
-	left: 50%;
-	margin-top: -20vh;
-	margin-left: -15vw;
 	background-color: #4099FF;
 	border-radius: 5px;
-	text-align: center;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column; /* works with row or column */
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
 	z-index: 11;
 }
 
 .text-one {
 	color: #0033CC;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	font-weight: 400;
 	font-size: 1.2em;
 }
 
 .authenticate-prompt {
-	width: 30vw;
+	width: 25vw;
 	padding: 15px 25px;
 	border: 1px solid #FFF;
 	border-radius: 5px;
@@ -56,6 +62,14 @@ authenticate-prompt-moz-placeholder {
 }
 
 #footer-overlay {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column; /* works with row or column */
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
 	height: 17vh;
 	width: 100vw;
 	background-color: #4099FF;
