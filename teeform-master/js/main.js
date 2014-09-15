@@ -5,7 +5,8 @@ function appReady() {
 	// Menu Snapper
 	var snapper = new Snap({
 		element: document.getElementById("content"),
-		disable: "right"
+		disable: "right",
+		touchToDrag: false,
 	});
 
 	$(document).on("click", "#toolbar-menu", function(){
