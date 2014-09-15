@@ -78,7 +78,7 @@ $(function () {
 				alert("Please enter something to tweet!");
 			} else {
 				var params = {
-					status: msg_in + " #napalmapp",
+					status: msg_in + " #NapalmApp",
 					lat: latitude(),
 					long: longitude()
 				};
