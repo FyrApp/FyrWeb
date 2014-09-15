@@ -1,8 +1,9 @@
-var map
+var map, oms;
 var cb = new Codebird;
 var twitter_authed = false;
 var torontolatlng = { lat: 43.7869432, lng: -79.1899812}
-var latitude, longitude;
+var my_marker;
+var iw = new google.maps.InfoWindow();
 
 function initialize() {
 	var mapOptions = {
@@ -11,6 +12,14 @@ function initialize() {
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
+	oms = new OverlappingMarkerSpiderfier(map);
+	oms.addListener('click', function(marker, event) {
+		  iw.setContent(marker.desc);
+		  iw.open(map, marker);
+	});
+	oms.addListener('spiderfy', function(markers) {
+		  iw.close();
+	});
 }
 
 function add_marker(pos, str, image) {
@@ -19,13 +28,9 @@ function add_marker(pos, str, image) {
 		map: map,
 		icon: image,
 		animation: google.maps.Animation.DROP,
+		desc : str,
 	});
-	var infowindow = new google.maps.InfoWindow({
-		content: str
-	});
-	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.open(map, marker);
-	});
+	oms.addMarker(marker);
 }
 
 $(function(){
@@ -41,8 +46,22 @@ function handle_errors(error) {
 }
 
 function handle_geolocation_query(position){  
-	latitude = (position.coords.latitude);
-	longitude = (position.coords.longitude); 
+	console.log(position);
+	my_marker = new google.maps.Marker({
+		position : {lat : (position.coords.latitude),
+		lng : (position.coords.longitude)},
+		draggable : true,
+		map: map,
+		desc: "your location",
+	});
+	oms.addMarker(my_marker);
+}
+
+function latitude(){
+	return my_marker.position.k
+}
+function longitude(){
+	return my_marker.position.B
 }
 
 $(function () {
@@ -60,8 +79,8 @@ $(function () {
 			} else {
 				var params = {
 					status: msg_in + " #napalmapp",
-					lat: latitude,
-					long: longitude
+					lat: latitude(),
+					long: longitude()
 				};
 
 				cb.__call(
