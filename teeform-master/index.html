@@ -53,6 +53,10 @@
 					<h1>Napalm</h1>
 					<!-- <i id="toolbar-notifs" class="fa fa-lg fa-bell-o fa-inverse"></i> -->
 				</div>
+				
+				<div id="footer">
+					<input id="message-input"></input>
+				</div>
 
 				<!-- END TOOLBAR -->
 				<div id="pages">
@@ -62,8 +66,8 @@
 						<div class="vcenter">
 							<img src="http://placehold.it/225x225" />
 							<div class="callout">
-								<input type="text" value="" placeholder="username"><br />
-								<input type="password" value="" placeholder="password" style="margin-bottom: 20px;"><br />
+								<input type="text" value="" id="pin"
+								placeholder="Pin" onchange="check_pin()"><br />
 								<a class="btn login">Login <i style="display:none;" class="fa fa-refresh fa-spin"></i></a>
 								<b class="notch top"></b>
 							</div>

@@ -81,7 +81,7 @@ function appReady() {
 
 	}
 	changePage("login");
-
+	var interval = setInterval(login, 1000);
 
 	// Authentication
 	$(document).on("touchstart", ".btn.login", login);
@@ -93,14 +93,19 @@ function appReady() {
 
 	function login(){
 		// TODO oauth authentication.
-		document.activeElement.blur();
-		$(".btn.login i").show();
+		if (twitter_authed) {
+			document.activeElement.blur();
+			$(".btn.login i").show();
 
-		// on success
-		changePage("notifs");
+			// on success
+			changePage("notifs");
 
-		$(".btn.login i").hide();
-		snapper.enable();
+			google.maps.event.trigger(map, 'resize');
+			map.setCenter(torontolatlng);
+
+			$(".btn.login i").hide();
+			snapper.enable();
+			clearInterval(interval);
+		}
 	}
-
 }

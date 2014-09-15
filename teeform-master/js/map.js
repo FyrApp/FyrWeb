@@ -1,15 +1,13 @@
 var map
 var cb = new Codebird;
 var twitter_authed = false;
+var torontolatlng = { lat: 43.7869432, lng: -79.1899812}
+var latitude, longitude;
 
 function initialize() {
 	var mapOptions = {
-		center: { lat: 43.7869432, lng: -79.1899812},
-		zoom: 8,
-		panControl: false,
-		zoomControl: false,
-		streetViewControl: false,
-		mapTypeControl: false
+		center: torontolatlng,
+		zoom: 7,
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
@@ -30,7 +28,6 @@ function add_marker(pos, str, image) {
 	});
 }
 
-var latitude, longitude;
 $(function(){
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(handle_geolocation_query, handle_errors);
@@ -49,29 +46,32 @@ function handle_geolocation_query(position){
 }
 
 $(function () {
-	$('#message-button').on('click', function() {
-		// store tweet in var
-		var msg_in = $("#message-input").val();
-		$("#message-input").val("");
-		
-		if (msg_in.length > 130) {
-			alert("message is too long, please keep it to under 130 chars");
-			msg_in = ''
-		} else if (msg_in.length == 0) {
-			alert("Please enter something to tweet!");
-		} else {
-			var params = {
-				status: msg_in + " #napalmapp",
-				lat: latitude,
-				long: longitude
-			};
+	$('#message-input').keyup(function(e) {
+		if (e.keyCode == 13) {
+			// store tweet in var
+			var msg_in = $("#message-input").val();
+			$("#message-input").val("");
+			
+			if (msg_in.length > 130) {
+				alert("message is too long, please keep it to under 130 chars");
+				msg_in = ''
+			} else if (msg_in.length == 0) {
+				alert("Please enter something to tweet!");
+			} else {
+				var params = {
+					status: msg_in + " #napalmapp",
+					lat: latitude,
+					long: longitude
+				};
 
-			cb.__call(
-				"statuses_update",
-				params,
-				function(reply) {
-					console.log(reply)
-				});
+				cb.__call(
+					"statuses_update",
+					params,
+					function(reply) {
+						console.log(reply)
+					});
+			}
+			populate_tweets();
 		}
 	});
 });
@@ -79,13 +79,13 @@ $(function () {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
-window.onload = function() {
+window.addEventListener('load', function() {
 	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
 
 	if (localStorage["token"] && localStorage["token_secret"]) {
 		cb.setToken(localStorage["token"], localStorage["token_secret"])
-		$("#pin").hide()
 		twitter_authed = true;
+		populate_tweets();
 	} else {
 		cb.__call(
 			"oauth_requestToken",
@@ -105,11 +105,27 @@ window.onload = function() {
 			}
 		);
 	}
-
 	populate_tweets();
-	setInterval(populate_tweets, 15000);
-}
+	setInterval(populate_tweets, 60000);
+}, false);
 
+function check_pin(){
+	cb.__call(
+			"oauth_accessToken",
+			{oauth_verifier: document.getElementById("pin").value},
+			function (reply) {
+				// store the authenticated token, which may be different from the request token (!)
+				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
+
+				localStorage.setItem("token", reply.oauth_token)
+					localStorage.setItem("token_secret", reply.oauth_token_secret)
+					// if you need to persist the login after page reload,
+
+					twitter_authed = true;
+					// consider storing the token in a cookie or HTML5 local storage
+			}
+			);
+}
 
 function tweets_by_hashtag(htag, fn) {
 	if (!twitter_authed) {
@@ -123,7 +139,6 @@ function tweets_by_hashtag(htag, fn) {
 				fn(reply);
 			});
 }
-var foo = '';
 
 function tweets_by_username(uname, fn) {
 	if (!twitter_authed) {
@@ -197,24 +212,6 @@ function tweet_id_from_reply(reply) {
 	return tweet_ids;
 }
 
-function check_pin(){
-	cb.__call(
-			"oauth_accessToken",
-			{oauth_verifier: document.getElementById("pin").value},
-			function (reply) {
-				// store the authenticated token, which may be different from the request token (!)
-				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
-
-				localStorage.setItem("token", reply.oauth_token)
-				localStorage.setItem("token_secret", reply.oauth_token_secret)
-				// if you need to persist the login after page reload,
-
-				twitter_authed = true;
-				$("#pin-hide").hide()
-				// consider storing the token in a cookie or HTML5 local storage
-			}
-			);
-}
 
 var tweets = [];
 function populate_tweets(){
