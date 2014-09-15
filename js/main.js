@@ -1,235 +1,112 @@
-var map
-var cb = new Codebird;
-var twitter_authed = false;
+$(document).ready(appReady);
 
-function initialize() {
-	var mapOptions = {
-		center: { lat: 43.7869432, lng: -79.1899812},
-		zoom: 8,
-		panControl: false,
-		zoomControl: false,
-		streetViewControl: false,
-		mapTypeControl: false
-	};
-	map = new google.maps.Map(document.getElementById('map-canvas'),
-			mapOptions);
-}
+function appReady() {
 
-function add_marker(pos, str, image) {
-	var marker = new google.maps.Marker({
-		position: pos,
-		map: map,
-		icon: image,
-		animation: google.maps.Animation.DROP,
+	// Menu Snapper
+	var snapper = new Snap({
+		element: document.getElementById("content"),
+		disable: "right",
+		touchToDrag: false,
 	});
-	var infowindow = new google.maps.InfoWindow({
-		content: str
+
+	$(document).on("click", "#toolbar-menu", function(){
+		snapper.open("left")
 	});
-	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.open(map, marker);
+
+	snapper.on("animated", function(){
+		$("body").width("0%").width("100%"); /* Partial fix for issue #002 */
 	});
-}
 
-var latitude, longitude;
-$(function(){
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(handle_geolocation_query, handle_errors);
-	} else {
-		alert('GeoLocation not ready');
-	}
-});
+	// Page Changing
+	var currPage = "";
+	var pageStack = new Array();
 
-function handle_errors(error) {  
-	// error handling here
-}
-
-function handle_geolocation_query(position){  
-	latitude = (position.coords.latitude);
-	longitude = (position.coords.longitude); 
-}
-
-$(function () {
-	$('#message-button').on('click', function() {
-		// store tweet in var
-		var msg_in = $("#message-input").val();
-		$("#message-input").val("");
-		
-		if (msg_in.length > 130) {
-			alert("message is too long, please keep it to under 130 chars");
-			msg_in = ''
-		} else if (msg_in.length == 0) {
-			alert("Please enter something to tweet!");
+	$(document).on("touchstart", ".link", function(event){
+		event.stopPropagation();
+		event.preventDefault();
+		if(event.handled !== true) {
+			changePage($(this).data("page"))
+		event.handled = true;
 		} else {
-			var params = {
-				status: msg_in + " #napalmapp",
-				lat: latitude,
-				long: longitude
-			};
-
-			cb.__call(
-				"statuses_update",
-				params,
-				function(reply) {
-					console.log(reply)
-				});
+			return false;
 		}
-	});
-});
+	})
 
-google.maps.event.addDomListener(window, 'load', initialize);
+	function changePage (page) {
 
-//Twitter
-window.onload = function() {
-	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
+		snapper.close();
 
-	if (localStorage["token"] && localStorage["token_secret"]) {
-		cb.setToken(localStorage["token"], localStorage["token_secret"])
-		$("#pin").hide()
-		twitter_authed = true;
-	} else {
-		cb.__call(
-			"oauth_requestToken",
-			{oauth_callback: "oob"},
-			function (reply) {
-				// stores it
-				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
+		// Parsing page request
+		if (page == "back") {
+			page = lastPage.pop()
+		}
 
-				// gets the authorize screen URL
-				cb.__call(
-					"oauth_authorize",
-					{},
-					function (auth_url) {
-						window.codebird_auth = window.open(auth_url);
-					}
-				);
-			}
-		);
-	}
+		// Switching page
+		$(".page").each(function(){
+			if ($(this).data("page") == page) {
 
-	populate_tweets();
-	setInterval(populate_tweets, 15000);
-}
+				// Header hiding
+				if ($(this).hasClass("noheader")) {
+					$("#toolbar").hide()
+				} else {
+					$("#toolbar").show()
+				}
 
+				// Page animations
+				if (page == "login"){
+					$(this).slideDown();
+				} else {
+					$(this).show()
+				}
+			} else {
 
-function tweets_by_hashtag(htag, fn) {
-	if (!twitter_authed) {
-		return null;
-	}
-	cb.__call(
-			"search_tweets",
-			"q=%23" + htag,
-			function (reply, rate_limit_status) {
-				console.log(rate_limit_status);
-				fn(reply);
-			});
-}
-var foo = '';
-
-function tweets_by_username(uname, fn) {
-	if (!twitter_authed) {
-		return null;
-	}
-
-	cb.__call(
-			"search_tweets",
-			"q=%3A" + uname,
-			function (reply, rate_limit_status) {
-				console.log(rate_limit_status);
-				fn(reply);
-			});
-}
-
-function tweets_by_following(uname, fn) {
-	if (!twitter_authed) {
-		return null;
-	}
-
-	cb.__call(
-			"followers_list",
-			"screen_name=" + uname,
-			function (reply, rate_limit_status) {
-				console.log(rate_limit_status);
-				fn(reply);
-			});
-}
-
-function tweets_by_latlong(fn) {
-	if (!twitter_authed) {
-		return null;
-	}
-
-	var bounds = map.getBounds();
-
-	var center = bounds.getCenter();
-	var ne = bounds.getNorthEast();
-
-	// r = radius of the earth in statute miles
-	var r = 3963.0;
-
-	// Convert lat or lng from decimal degrees into radians (divide by 57.2958)
-	var lat1 = center.lat() / 57.2958;
-	var lon1 = center.lng() / 57.2958;
-	var lat2 = ne.lat() / 57.2958;
-	var lon2 = ne.lng() / 57.2958;
-
-	// distance = circle radius from center to Northeast corner of bounds
-	var dis = parseInt(r * Math.acos(Math.sin(lat1) * Math.sin(lat2) +
-	  Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1)));
-
-	cb.__call(
-			"search_tweets",
-			"q=#napalmapp&geocode=" + center.lat() + "," + center.lng() + "," + dis + "mi",
-			function (reply, rate_limit_status) {
-				console.log(rate_limit_status);
-				fn(reply);
-			});
-}
-
-function tweet_id_from_reply(reply) {
-
-	var statuses = reply.statuses;
-	var tweet_ids = [];
-	console.log(statuses);
-	for (i = 0; i < statuses.length; i++) {
-		tweet_ids.push(statuses[i].id);
-	}
-
-	return tweet_ids;
-}
-
-function check_pin(){
-	cb.__call(
-			"oauth_accessToken",
-			{oauth_verifier: document.getElementById("pin").value},
-			function (reply) {
-				// store the authenticated token, which may be different from the request token (!)
-				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
-
-				localStorage.setItem("token", reply.oauth_token)
-				localStorage.setItem("token_secret", reply.oauth_token_secret)
-				// if you need to persist the login after page reload,
-
-				twitter_authed = true;
-				$("#pin-hide").hide()
-				// consider storing the token in a cookie or HTML5 local storage
-			}
-			);
-}
-
-var tweets = [];
-function populate_tweets(){
-	tweets_by_hashtag("napalmapp", function(reply){
-		statuses = reply["statuses"]
-		for (i in statuses){
-			if (tweets.indexOf(statuses[i]["id"]) == -1){
-				tweets.push(statuses[i]["id"])
-				if (statuses[i]["geo"]){
-					status_pos = statuses[i]["geo"]["coordinates"]
-					status_latlng = {lat : status_pos[0], lng: status_pos[1]}
-					image = statuses[i]["user"]["profile_image_url"]
-					add_marker(status_latlng, statuses[i]["text"].replace("#napalmapp", ""), image)
+				// Page animations
+				if (currPage == "login"){
+					$(this).slideUp()
+				} else {
+					$(this).hide()
 				}
 			}
+		});
+
+		// Special page cases
+		switch(page){
+			case "login":
+				snapper.disable();
+				break;
+			default:
+				break;
+		}
+
+		currPage = page;
+
+	}
+	changePage("login");
+	var interval = setInterval(login, 1000);
+
+	// Authentication
+	$(document).on("touchstart", ".btn.login", login);
+	$('[data-page="login"] input').bind('keypress', function(e) {
+		if(e.keyCode==13){
+			login();
 		}
 	});
+
+	function login(){
+		// TODO oauth authentication.
+		if (twitter_authed) {
+			document.activeElement.blur();
+			$(".btn.login i").show();
+
+			// on success
+			changePage("notifs");
+
+			google.maps.event.trigger(map, 'resize');
+			map.setCenter(torontolatlng);
+
+			$(".btn.login i").hide();
+			snapper.enable();
+			clearInterval(interval);
+		}
+	}
 }
