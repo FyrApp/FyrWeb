@@ -1,0 +1,197 @@
+{
+	-webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+body {
+	-webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+	-webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+	-webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+	font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+	background: #002554;
+}
+
+
+/* GENERAL ********************************************************************/
+.vcenter {										/* vertical centering */
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-moz-transform:    translateY(-50%);
+	-ms-transform:     translateY(-50%);
+	-o-transform:      translateY(-50%);
+	transform:         translateY(-50%);
+}
+
+input {
+	border: 2px solid #bdc3c7; /* TODO update colours to scheme */
+	color: #34495e;
+	font-size: 15px;
+	line-height: 1.467;
+	padding: 8px 12px;
+	height: 32px;
+	-webkit-appearance: none;
+	border-radius: 6px;
+	margin: 0 0 12px 0;
+	width: calc(100% - 28px);
+}
+
+input:focus {
+	outline: none;
+}
+
+.btn {
+	white-space: normal;
+	padding: 10px 19px;
+	font-size: 17px;
+	line-height: 1.471;
+	border-radius: 6px;
+	color: #fff;
+	background-color: #6CACE4;
+	border: none;
+	text-decoration: none;
+	margin: 10px 0 0;
+}
+
+#content {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* NOTIF **********************************************************************/
+.notif {
+	width: calc(100% - 80px);
+	max-width: 310px;
+	margin: 15px auto;
+	padding: 15px;
+	border: 2px solid #bdc3c7;
+	background-color: #eef4f9;
+}
+
+/* SNAPPER ********************************************************************/
+/* https://github.com/jakiestfu/Snap.js/ */
+.snap-drawer ul {
+	background: #002554;
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+}
+
+.snap-drawer li > p {
+	display: block;
+	border-bottom: 1px solid rgba(0,0,0, 0.1);
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	padding: 15px;
+	font-weight: bold;
+	text-decoration: none;
+	color: #ccc;
+	text-indent: 5px;
+	margin: 0;
+}
+
+.snap-drawer i {
+	margin-right: 15px;
+}
+
+.snap-content {
+	box-shadow: 0px 0 10px 0px #888;
+}
+
+#profile {
+	height: 50px;
+	padding: 15px 0;
+}
+
+#profile-img {
+	margin-left: 15px;
+	width: 50px;
+	float: left;
+}
+
+#profile-name {}
+
+#profile-community{}
+
+
+/* TOOLBAR ********************************************************************/
+#toolbar {
+	background: #6CACE4;
+	position: fixed;
+	z-index: 3;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: auto;
+	height: 44px;
+}
+
+#toolbar h1 {
+	font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif; font-weight: 100; letter-spacing: 1px;
+	color: #fff;
+	font-size: 16px;
+	line-height: 22px;
+	text-align: center;
+	position: absolute;
+	top: 0;
+	right: 44px;
+	left: 44px;
+	width: auto;
+	height: 44px;
+}
+
+#toolbar i {
+	position: absolute;
+	top: 15px;
+}
+
+#toolbar-menu {
+	left: 15px;
+}
+
+#toolbar-notifs {
+	right: 15px;
+}
+
+
+/* PAGES **********************************************************************/
+#pages {
+	position: absolute;
+	top: 0px;
+	margin: 0;
+	padding: 0;
+	background: #EFEFEF;
+	height: 100%;
+	width: 100%;
+}
+
+.page {
+	position: absolute;
+	top: 44px;
+	height: calc(100% - 44px);
+	width: 100%;
+	overflow-y: scroll; /* has to be scroll, not auto */
+	-webkit-overflow-scrolling: touch;
+}
+
+.noheader {
+	top: 0px;
+	height: 100%;
+}
+
+
+/* Login Page *****************************************************************/
+.page[data-page="login"] {
+	background: #6CACE4;
+	text-align: center;
+	z-index: 10000;
+}
+
+.page[data-page="login"] img {
+	width: 225px;
+	margin: 0 auto;
+}
+
+.page[data-page="login"] > div > .callout {
+	width: 250px;
+	margin: 0 auto;
+}
