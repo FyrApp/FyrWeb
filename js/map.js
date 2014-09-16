@@ -35,14 +35,28 @@ function add_marker(pos, str, image) {
 
 $(function(){
 	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(handle_geolocation_query, handle_errors);
-	} else {
-		alert('GeoLocation not ready');
+		navigator.geolocation.getCurrentPosition(handle_geolocation_query,
+			handle_errors,
+			{maximumAge:600000, timeout:10000, enableHighAccuracy: true}
+		);
 	}
 });
 
-function handle_errors(error) {  
-	// error handling here
+function handle_errors(error) {
+	// If High accuracy times out then use lower accuracy
+	if (error.code == error.TIMEOUT) {
+		navigator.geolocation.getCurrentPosition(
+			successCallback, 
+			errorCallback_lowAccuracy,
+			{maximumAge:600000, timeout:10000, enableHighAccuracy: false}
+		);
+	}
+	if (error.code == 1) {
+		// permission denied error
+	}
+	else if (error.code == 2) {
+		//unable to determine location
+	}
 }
 
 function handle_geolocation_query(position){  
