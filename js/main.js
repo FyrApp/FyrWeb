@@ -83,7 +83,8 @@ function appReady() {
 	}
 	changePage("login");
 	var interval = setInterval(login, 1000);
-
+	
+	var logout = setInterval(logout, 1000);
 	// Authentication
 	$(document).on("touchstart", ".btn.login", login);
 	$('[data-page="login"] input').bind('keypress', function(e) {
@@ -107,6 +108,12 @@ function appReady() {
 			$(".btn.login i").hide();
 			snapper.enable();
 			clearInterval(interval);
+		}
+	}
+
+	function logout() {
+		if (!twitter_authed && sign_off) {
+			window.location.reload();
 		}
 	}
 }

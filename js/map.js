@@ -1,6 +1,7 @@
 var map, oms;
 var cb = new Codebird;
 var twitter_authed = false;
+var sign_off = false;
 var torontolatlng = { lat: 43.7869432, lng: -79.1899812}
 var my_marker;
 var iw = new google.maps.InfoWindow();
@@ -53,6 +54,9 @@ function handle_errors(error) {
 	}
 	if (error.code == 1) {
 		// permission denied error
+		localStorage.clear();
+		sign_off = true;
+		twitter_authed = false;
 	}
 	else if (error.code == 2) {
 		//unable to determine location
