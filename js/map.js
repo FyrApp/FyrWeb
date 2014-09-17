@@ -78,7 +78,7 @@ $(function () {
 				alert("Please enter something to tweet!");
 			} else {
 				var params = {
-					status: msg_in + " #NapalmApp",
+					status: msg_in + " #FyrApp",
 					lat: latitude(),
 					long: longitude()
 				};
@@ -212,7 +212,7 @@ function tweets_by_latlong(fn) {
 
 	cb.__call(
 			"search_tweets",
-			"q=#napalmapp&geocode=" + center.lat() + "," + center.lng() + "," + dis + "mi",
+			"q=#fyrapp&geocode=" + center.lat() + "," + center.lng() + "," + dis + "mi",
 			function (reply, rate_limit_status) {
 				console.log(rate_limit_status);
 				fn(reply);
@@ -234,7 +234,7 @@ function tweet_id_from_reply(reply) {
 
 var tweets = [];
 function populate_tweets(){
-	tweets_by_hashtag("napalmapp", function(reply){
+	tweets_by_hashtag("fyrapp", function(reply){
 		statuses = reply["statuses"]
 		for (i in statuses){
 			if (tweets.indexOf(statuses[i]["id"]) == -1){
@@ -243,7 +243,7 @@ function populate_tweets(){
 					status_pos = statuses[i]["geo"]["coordinates"]
 					status_latlng = {lat : status_pos[0], lng: status_pos[1]}
 					image = statuses[i]["user"]["profile_image_url"]
-					add_marker(status_latlng, statuses[i]["text"].replace("#napalmapp", ""), image)
+					add_marker(status_latlng, statuses[i]["text"].replace("#fyrapp", ""), image)
 				}
 			}
 		}
