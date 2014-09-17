@@ -261,7 +261,7 @@ function populate_tweets(){
 					status_pos = statuses[i]["geo"]["coordinates"]
 					status_latlng = {lat : status_pos[0], lng: status_pos[1]}
 					image = statuses[i]["user"]["profile_image_url"]
-					add_marker(status_latlng, statuses[i]["text"].replace("#fyrapp", ""), image)
+					add_marker(status_latlng, statuses[i]["text"].replace("#FyrApp", ""), image)
 				}
 			}
 		}
