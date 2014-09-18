@@ -104,6 +104,7 @@ function appReady() {
 
 			google.maps.event.trigger(map, 'resize');
 			map.setCenter(torontolatlng);
+			populate_tweets();
 
 			$(".btn.login i").hide();
 			snapper.enable();
