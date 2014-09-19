@@ -117,51 +117,24 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
 window.addEventListener('load', function() {
-	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
+	// cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
 
-	if (localStorage["token"] && localStorage["token_secret"]) {
-		cb.setToken(localStorage["token"], localStorage["token_secret"])
-		twitter_authed = true;
-		populate_tweets();
-	} else {
-		cb.__call(
-			"oauth_requestToken",
-			{oauth_callback: "oob"},
-			function (reply) {
-				// stores it
-				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
-
-				// gets the authorize screen URL
-				cb.__call(
-					"oauth_authorize",
-					{},
-					function (auth_url) {
-						window.codebird_auth = window.open(auth_url);
-					}
-				);
-			}
-		);
+	if (!twitter_authed) {
+		check_pin();
 	}
 	populate_tweets();
 	setInterval(populate_tweets, 60000);
 }, false);
 
 function check_pin(){
-	cb.__call(
-			"oauth_accessToken",
-			{oauth_verifier: document.getElementById("pin").value},
-			function (reply) {
-				// store the authenticated token, which may be different from the request token (!)
-				cb.setToken(reply.oauth_token, reply.oauth_token_secret);
+	OAuth.initialize('uCQfpbTm3DXNiQ6NJCyZnDhnsYE');
 
-				localStorage.setItem("token", reply.oauth_token)
-					localStorage.setItem("token_secret", reply.oauth_token_secret)
-					// if you need to persist the login after page reload,
-
-					twitter_authed = true;
-					// consider storing the token in a cookie or HTML5 local storage
-			}
-			);
+	//Authorize your user to twitter
+	OAuth.popup('twitter').done(function(twitter) {
+		twitter.me().done(function(me) {
+			twitter_authed = true;
+		})
+	}).fail(function(error) { console.log(error) });
 }
 
 function tweets_by_hashtag(htag, fn) {
