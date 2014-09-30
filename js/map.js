@@ -2,14 +2,190 @@ var map, oms;
 var cb = new Codebird;
 var twitter_authed = false;
 var sign_off = false;
+
 var torontolatlng = { lat: 43.7869432, lng: -79.1899812}
 var my_marker;
 var iw = new google.maps.InfoWindow();
 
 function initialize() {
+
+	var	main_color = '#2d313f',
+    	saturation_value= -20,
+    	brightness_value= 5;
+	
+	var style= [ 
+		{
+			//set saturation for the labels on the map
+			elementType: "labels",
+			stylers: [
+				{saturation: saturation_value}
+			]
+		},  
+	    { 
+			featureType: "poi",
+			elementType: "labels",
+			stylers: [
+				{visibility: "off"}
+			]
+		},
+		{
+	        featureType: 'road.highway',
+	        elementType: 'labels',
+	        stylers: [
+	            {visibility: "off"}
+	        ]
+	    }, 
+		{ 	
+			//don't show local road lables on the map
+			featureType: "road.local", 
+			elementType: "labels.icon", 
+			stylers: [
+				{visibility: "off"} 
+			] 
+		},
+		{ 
+			//don't show arterial road lables on the map
+			featureType: "road.arterial", 
+			elementType: "labels.icon", 
+			stylers: [
+				{visibility: "off"}
+			] 
+		},
+		{
+			//don't show road lables on the map
+			featureType: "road",
+			elementType: "geometry.stroke",
+			stylers: [
+				{visibility: "off"}
+			]
+		}, 
+		//style different elements on the map
+		{ 
+			featureType: "transit", 
+			elementType: "geometry.fill", 
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		}, 
+		{
+			featureType: "poi",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "poi.government",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "poi.sport_complex",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "poi.attraction",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "poi.business",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "transit",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "transit.station",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "landscape",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+			
+		},
+		{
+			featureType: "road",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		},
+		{
+			featureType: "road.highway",
+			elementType: "geometry.fill",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		}, 
+		{
+			featureType: "water",
+			elementType: "geometry",
+			stylers: [
+				{ hue: main_color },
+				{ visibility: "on" }, 
+				{ lightness: brightness_value }, 
+				{ saturation: saturation_value }
+			]
+		}
+	];
 	var mapOptions = {
 		center: torontolatlng,
-		zoom: 7,
+		zoom: 8,
+		styles: style,
+		disableDefaultUI: true
 	};
 	map = new google.maps.Map(document.getElementById('map-canvas'),
 			mapOptions);
@@ -21,6 +197,28 @@ function initialize() {
 	oms.addListener('spiderfy', function(markers) {
 		  iw.close();
 	});
+	
+	function CustomZoomControl(controlDiv, map) {
+	  	
+		var controlUIzoomIn = document.getElementById('cd-zoom-in'),
+	  		controlUIzoomOut = document.getElementById('cd-zoom-out');
+	  	
+		controlDiv.appendChild(controlUIzoomIn);
+	  	controlDiv.appendChild(controlUIzoomOut);
+
+		google.maps.event.addDomListener(controlUIzoomIn, 'click', function() {
+		    map.setZoom(map.getZoom()+1)
+		});
+		google.maps.event.addDomListener(controlUIzoomOut, 'click', function() {
+		    map.setZoom(map.getZoom()-1)
+		});
+	}
+
+	var zoomControlDiv = document.createElement('div');
+ 	var zoomControl = new CustomZoomControl(zoomControlDiv, map);
+
+  	map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControlDiv);
+
 }
 
 function add_marker(pos, str, image) {
@@ -54,7 +252,8 @@ function handle_errors(error) {
 	}
 	if (error.code == 1) {
 		// permission denied error
-		localStorage.clear();
+		localStorage.removeItem("token");
+		localStorage.removeItem("token_secret");
 		sign_off = true;
 		twitter_authed = false;
 	}
@@ -116,7 +315,7 @@ $(function () {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 //Twitter
-window.addEventListener('load', function() {
+function twitter_authenticate() {
 	cb.setConsumerKey("gCHc0xXd5pG2EOIovEQyh8Oel", "ZRhqLqVD09UZqCPp6wc4wFiWZigNpGJNCA4HtrWyUPDylxIVSn");
 
 	if (localStorage["token"] && localStorage["token_secret"]) {
@@ -144,7 +343,9 @@ window.addEventListener('load', function() {
 	}
 	populate_tweets();
 	setInterval(populate_tweets, 60000);
-}, false);
+}
+
+window.addEventListener('load', twitter_authenticate());
 
 function check_pin(){
 	cb.__call(

@@ -126,7 +126,7 @@ input:focus {
 
 /* TOOLBAR ********************************************************************/
 #toolbar {
-	background: #6CACE4;
+	background: #2d313f;
 	position: fixed;
 	z-index: 3;
 	top: 0;
